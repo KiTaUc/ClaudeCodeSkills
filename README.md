@@ -1,6 +1,6 @@
 # Claude Code Skills
 
-Набор навыков Claude Code. Скопируй оба навыка в личную папку Claude Code или добавь нужный каталог в репозиторий проекта.
+Набор навыков Claude Code. Скопируй навыки в личную папку Claude Code или добавь нужный каталог в репозиторий проекта.
 
 ## Architecture Blueprint
 
@@ -8,7 +8,9 @@
 
 ## Minecraft Plugin Doctor
 
-`/minecraft-plugin-doctor` помогает проектировать, создавать, собирать и отлаживать плагины Bukkit, Spigot и Paper. Справка по офлайн-сборке FeurixMC подгружается только при работе с этим проектом. Полное исходное ТЗ в репозиторий не включено.
+`/minecraft-plugin-doctor` помогает проектировать, создавать, собирать и отлаживать плагины Bukkit, Spigot и Paper. Для FeurixMC он учитывает офлайн-сборку; полное исходное ТЗ в репозиторий не включено.
+
+Если задача затрагивает `/help`, команды или чат, навык проверяет существующий стиль. Для нового интерфейса без выбранного стиля он один раз предложит пресет: Dark Aqua Premium, Classic Minecraft, Minimal, RPG/Fantasy или Custom. Подробная палитра и правила `TextComponent`, `ClickEvent` и `HoverEvent` вынесены в `references/ui-style.md` и подгружаются только для UI-задач.
 
 ## Установка в Windows
 
@@ -35,5 +37,7 @@ Copy-Item -Recurse "$env:TEMP\ClaudeCodeSkills\.claude\skills\*" "$HOME\.claude\
 │   └── templates/adr.md
 └── minecraft-plugin-doctor/
     ├── SKILL.md
-    └── references/feurixmc.md
+    └── references/
+        ├── feurixmc.md
+        └── ui-style.md
 ```

@@ -1,6 +1,6 @@
 ---
 name: minecraft-plugin-doctor
-description: Design, implement, review, debug, and build Java plugins for Bukkit, Spigot, and Paper. Use for plugin architecture, commands, listeners, configuration, storage, version/API compatibility, build failures, runtime bugs, and release JAR verification. Apply the FeurixMC offline build rules when that project is detected.
+description: Design, implement, review, debug, and build Java plugins for Bukkit, Spigot, and Paper. Use for architecture, commands, listeners, configuration, persistence, version/API compatibility, build failures, runtime bugs, player-facing help/chat UI, localization, clickable commands, hover text, and release JAR verification. Apply FeurixMC offline build rules when detected.
 ---
 
 # Minecraft Plugin Doctor
@@ -10,9 +10,9 @@ Deliver the smallest maintainable plugin change that satisfies the request and b
 ## Workflow
 
 1. **Identify constraints.** Inspect the working directory and Git status. Determine server/API version, Java target, current project conventions, build entrypoint, plugin descriptor, and relevant tests from existing files. Treat checked-in build scripts and source as more authoritative than assumptions in chat. If one missing fact blocks a safe implementation, ask one focused question; otherwise proceed with a stated conservative assumption.
-2. **Read only the relevant slice.** Use file discovery and targeted search (`rg --files`, `rg -n`, focused file ranges). Read `plugin.yml`, the main class, and only the command, listener, service, persistence, config, or test files touched by the request. Avoid dumping the whole repository or long logs into context.
+2. **Read only the relevant slice.** Use file discovery and targeted search (`rg --files`, `rg -n`, focused file ranges). Read `plugin.yml`, the main class, and only the command, listener, service, persistence, config, UI, or test files touched by the request. Avoid dumping the whole repository or long logs into context.
 3. **Choose proportionate design.** Before a nontrivial change, identify its user flow, state transitions, persistence, API boundary, and thread requirements. Keep existing package/layout conventions. Separate entrypoint, command/listener, domain/service, and persistence responsibilities when that makes behavior clearer; do not create layers or managers for a tiny feature.
-4. **Implement narrowly.** Preserve existing behavior, config values, permissions, data, and public command syntax unless asked to change them. Validate command arguments and null/offline/world-unload cases. Keep server API calls on the main thread; only move blocking I/O off-thread when ownership, ordering, and safe return to the main thread are explicit. Cancel scheduled tasks and close owned resources on disable.
+4. **Implement narrowly.** Preserve existing behavior, config values, permissions, data, public command syntax, and established UI unless asked to change them. Validate command arguments and null/offline/world-unload cases. Keep server API calls on the main thread; only move blocking I/O off-thread when ownership, ordering, and safe return to the main thread are explicit. Cancel scheduled tasks and close owned resources on disable.
 5. **Verify, then report limits.** Run the repository's existing build/test entrypoint. Inspect the resulting JAR for `plugin.yml`, the declared main class, required resources, and intentionally bundled dependencies. Report exactly what passed. A compile against stubs is compile validation only—not proof that events, scheduling, inventories, or the real server API behave correctly.
 
 ## Architecture and correctness
@@ -23,6 +23,10 @@ Deliver the smallest maintainable plugin change that satisfies the request and b
 - Use UUIDs for player identity when the existing data model does so. Check `getCommand(...)` and optional integrations before use. Declare commands, permissions, aliases, `depend`/`softdepend`, and resources consistently in `plugin.yml` and implementation.
 - Keep persistence behind a focused service/repository boundary when it is reused. Use prepared statements and transactions for SQL. Do not perform long database/file work on the tick thread. Serialize access to a SQLite connection or give it a clear single-thread owner; never call Bukkit world/player/inventory APIs from a database worker.
 - Treat config and player data as user data. Preserve existing files and values. Ask before destructive schema migrations, resets, broad permission changes, world edits, or replacing user-managed JARs.
+
+## Player-facing style
+
+When adding or redesigning `/help`, command output, chat messages, or clickable components, read `references/ui-style.md` first. Inspect the existing plugin/repository style and explicit user preferences. Preserve an established style without asking again. If this is new UI and no style is set, ask once which preset to use: Dark Aqua Premium, Classic Minecraft, Minimal, RPG/Fantasy, or Custom. Recommend Dark Aqua Premium; if the user says “choose for me,” use that preset. Do not ask for non-UI tasks. Apply the chosen palette and interaction rules consistently across related commands and plugins; do not silently change a project-wide standard.
 
 ## Build and debugging
 
