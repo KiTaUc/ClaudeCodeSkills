@@ -1,34 +1,39 @@
 # Claude Code Skills
 
-Репозиторий пользовательских навыков для Claude Code.
+Набор навыков Claude Code. Скопируй оба навыка в личную папку Claude Code или добавь нужный каталог в репозиторий проекта.
+
+## Architecture Blueprint
+
+`/architecture-blueprint` проектирует и проверяет архитектуру новых и существующих приложений: границы модулей и сервисов, потоки данных, API, хранение, безопасность, надёжность, масштабирование и план миграции. Навык сначала выясняет реальные требования, сравнивает только значимые варианты и предпочитает минимально сложное решение, которое закрывает цели. Шаблон ADR лежит в `templates/adr.md`.
 
 ## Minecraft Plugin Doctor
 
-`/.claude/skills/minecraft-plugin-doctor/` содержит skill для проектирования, разработки, отладки и сборки плагинов Bukkit, Spigot и Paper. В `references/feurixmc.md` находятся специальные правила сборки FeurixMC; Claude загружает их только при работе с этим проектом.
+`/minecraft-plugin-doctor` помогает проектировать, создавать, собирать и отлаживать плагины Bukkit, Spigot и Paper. Справка по офлайн-сборке FeurixMC подгружается только при работе с этим проектом. Полное исходное ТЗ в репозиторий не включено.
 
-### Установка в Windows
+## Установка в Windows
 
 В PowerShell выполни:
 
 ```powershell
 git clone https://github.com/KiTaUc/ClaudeCodeSkills.git "$env:TEMP\ClaudeCodeSkills"
 New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
-Copy-Item -Recurse "$env:TEMP\ClaudeCodeSkills\.claude\skills\minecraft-plugin-doctor" "$HOME\.claude\skills\"
+Copy-Item -Recurse "$env:TEMP\ClaudeCodeSkills\.claude\skills\*" "$HOME\.claude\skills\"
 ```
 
-Перезапусти Claude Code и вызови навык командой `/minecraft-plugin-doctor`. Claude также может выбрать его автоматически при соответствующей задаче.
+Перезапусти Claude Code. Вызывай навыки командами `/architecture-blueprint` и `/minecraft-plugin-doctor`; Claude также может автоматически выбрать подходящий навык по запросу.
 
-### Установка для одного проекта
+## Установка в один проект
 
-Скопируй каталог `.claude/skills/minecraft-plugin-doctor/` в корень нужного репозитория и запусти Claude Code из этого проекта. Такой вариант удобно коммитить вместе с проектом.
+Скопируй нужные папки из `.claude/skills/` в `.claude/skills/` проекта. Тогда навык будет использоваться только в этом репозитории и его можно хранить вместе с кодом.
 
 ## Структура
 
 ```text
-.claude/skills/minecraft-plugin-doctor/
-├── SKILL.md
-└── references/
-    └── feurixmc.md
+.claude/skills/
+├── architecture-blueprint/
+│   ├── SKILL.md
+│   └── templates/adr.md
+└── minecraft-plugin-doctor/
+    ├── SKILL.md
+    └── references/feurixmc.md
 ```
-
-Исходное ТЗ целиком в репозиторий не добавлено: сохранены только необходимые для навыка технические ограничения и правила сборки.
